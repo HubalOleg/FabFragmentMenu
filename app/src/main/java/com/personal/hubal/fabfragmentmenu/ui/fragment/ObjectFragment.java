@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import java.util.List;
 
 public class ObjectFragment extends Fragment implements ObjectAdapter.SelectObjectListener {
 
+    private static final String TAG = "ObjectFragment";
+
     private static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
 
     private TextView mTitleTextView;
@@ -41,6 +44,19 @@ public class ObjectFragment extends Fragment implements ObjectAdapter.SelectObje
         }
     };
     private ObjectAdapter mObjectAdapter;
+    private View.OnDragListener mOnDragListener = new View.OnDragListener() {
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            switch (dragEvent.getAction()) {
+                case DragEvent.ACTION_DRAG_EXITED:
+                    mObjectAdapter.stopDragAndDrop();
+                    break;
+            }
+            return true;
+        }
+    };
+
+
 
     public static ObjectFragment newInstance(String category) {
         Bundle args = new Bundle();
@@ -80,6 +96,7 @@ public class ObjectFragment extends Fragment implements ObjectAdapter.SelectObje
 
         LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         objectRecyclerView.setLayoutManager(layoutManager);
+        objectRecyclerView.setOnDragListener(mOnDragListener);
 
         mObjectAdapter = new ObjectAdapter(ObjectFragment.this);
         objectRecyclerView.setAdapter(mObjectAdapter);

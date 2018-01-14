@@ -1,11 +1,15 @@
 package com.personal.hubal.fabfragmentmenu.adapter;
 
+import android.content.ClipData;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.personal.hubal.fabfragmentmenu.R;
 
@@ -18,7 +22,11 @@ import java.util.List;
 
 public class ObjectAdapter extends RecyclerView.Adapter<ObjectAdapter.ObjectViewHolder> {
 
+    private static final String TAG = "ObjectAdapter";
+
     private List<Drawable> mObjectList = new ArrayList<>();
+
+    private View mDraggingView;
 
     public SelectObjectListener mSelectObjectListener;
 
@@ -48,9 +56,14 @@ public class ObjectAdapter extends RecyclerView.Adapter<ObjectAdapter.ObjectView
         notifyDataSetChanged();
     }
 
+    public void stopDragAndDrop() {
+        if (mDraggingView != null)
+            mDraggingView.cancelDragAndDrop();
+    }
+
     public class ObjectViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mObject;
+        private ImageView mImage;
         private int mPosition;
 
         private View.OnClickListener mObjectClickListener = new View.OnClickListener() {
@@ -60,17 +73,47 @@ public class ObjectAdapter extends RecyclerView.Adapter<ObjectAdapter.ObjectView
             }
         };
 
+        private View.OnLongClickListener mObjectLongClickListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipData dragData = ClipData.newPlainText("", "");
+
+                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
+
+                view.startDragAndDrop(dragData, myShadow, null, 0);
+                view.setOnDragListener(mOnDragListener);
+
+                return true;
+            }
+        };
+
+        private View.OnDragListener mOnDragListener = new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View view, DragEvent dragEvent) {
+                switch (dragEvent.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        mDraggingView = view;
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        mDraggingView = null;
+                        break;
+                }
+                return false;
+            }
+        };
+
         ObjectViewHolder(View itemView) {
             super(itemView);
 
-            mObject = itemView.findViewById(R.id.objectImageView);
             itemView.setOnClickListener(mObjectClickListener);
+            mImage = itemView.findViewById(R.id.objectImageView);
+            mImage.setOnLongClickListener(mObjectLongClickListener);
         }
 
         void onBind(int position, Drawable image) {
             mPosition = position;
 
-            mObject.setImageDrawable(image);
+            mImage.setImageDrawable(image);
         }
     }
 
