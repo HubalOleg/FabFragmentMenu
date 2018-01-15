@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.personal.hubal.fabfragmentmenu.SwipeRevealLayout;
 import com.personal.hubal.fabfragmentmenu.ui.fragment.CategoryFragment;
@@ -12,27 +13,35 @@ import com.personal.hubal.fabfragmentmenu.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button mSwipeButton;
+    private CategoryFragment mCategoryFragment;
+
+    private FrameLayout mCategoryContainer;
     private SwipeRevealLayout mSwipeRevealLayout;
+
+    private Button mSwipeButton;
 
     private boolean isMenuOpen = false;
 
     private SwipeRevealLayout.SwipeListener mSwipeListener = new SwipeRevealLayout.SwipeListener() {
         @Override
         public void onClosed(SwipeRevealLayout view) {
+            mCategoryFragment.setListScrollEnable(true);
+
             isMenuOpen = false;
             mSwipeButton.setText("Down");
         }
 
         @Override
         public void onOpened(SwipeRevealLayout view) {
+            mCategoryFragment.setListScrollEnable(true);
+
             isMenuOpen = true;
             mSwipeButton.setText("Up");
         }
 
         @Override
         public void onSlide(SwipeRevealLayout view, float slideOffset) {
-
+            mCategoryFragment.setListScrollEnable(false);
         }
     };
 
@@ -53,10 +62,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initUI();
-        openFragment(CategoryFragment.newInstance(), R.id.categoryContainer);
+        mCategoryFragment = CategoryFragment.newInstance();
+        openFragment(mCategoryFragment, R.id.categoryContainer);
     }
 
     private void initUI() {
+        mCategoryContainer = findViewById(R.id.categoryContainer);
+        mCategoryContainer.setClickable(true);
+
         mSwipeRevealLayout = findViewById(R.id.swipeRevealLayout);
 
         mSwipeRevealLayout.setSwipeListener(mSwipeListener);

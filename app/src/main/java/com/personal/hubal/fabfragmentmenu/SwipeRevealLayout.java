@@ -3,13 +3,11 @@ package com.personal.hubal.fabfragmentmenu;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.os.Debug;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -496,7 +494,6 @@ public class SwipeRevealLayout extends ViewGroup {
             final boolean velUpExceeded = pxToDp((int) yvel) <= -mMinFlingVelocity;
             final boolean velDownExceeded = pxToDp((int) yvel) >= mMinFlingVelocity;
 
-            final int pivotHorizontal = getHalfwayPivotHorizontal();
             final int pivotVertical = getHalfwayPivotVertical();
 
             if (velUpExceeded) {

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.personal.hubal.fabfragmentmenu.R;
+import com.personal.hubal.fabfragmentmenu.ScrollLinearLayoutManager;
 import com.personal.hubal.fabfragmentmenu.adapter.CategoryAdapter;
 import com.personal.hubal.fabfragmentmenu.adapter.ObjectAdapter;
 import com.personal.hubal.fabfragmentmenu.listener.CategoryTransitionListener;
@@ -33,6 +34,9 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.Select
     private ConstraintLayout mContainerLayout;
     private CategoryAdapter mCategoryAdapter;
     private ObjectAdapter mObjectAdapter;
+
+    private ScrollLinearLayoutManager mObjectLayoutManager;
+    private ScrollLinearLayoutManager mCategoryLayoutManager;
 
     private View.OnDragListener mOnDragListener = new View.OnDragListener() {
         @Override
@@ -74,9 +78,9 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.Select
         // Category RecyclerView
         RecyclerView categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
 
-        LinearLayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
-        categoryLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        categoryRecyclerView.setLayoutManager(categoryLayoutManager);
+        mCategoryLayoutManager = new ScrollLinearLayoutManager(getContext());
+        mCategoryLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        categoryRecyclerView.setLayoutManager(mCategoryLayoutManager);
 
         mCategoryAdapter = new CategoryAdapter(CategoryFragment.this);
         categoryRecyclerView.setAdapter(mCategoryAdapter);
@@ -84,9 +88,9 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.Select
         // Object RecyclerView
         RecyclerView objectRecyclerView = view.findViewById(R.id.objectRecyclerView);
 
-        LinearLayoutManager objectLayoutManager = new LinearLayoutManager(getContext());
-        objectLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        objectRecyclerView.setLayoutManager(objectLayoutManager);
+        mObjectLayoutManager = new ScrollLinearLayoutManager(getContext());
+        mObjectLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        objectRecyclerView.setLayoutManager(mObjectLayoutManager);
 
         mObjectAdapter = new ObjectAdapter();
         objectRecyclerView.setAdapter(mObjectAdapter);
@@ -104,7 +108,6 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.Select
         categoryList.add(ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_lock_power_off));
         categoryList.add(ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_lock_idle_alarm));
 
-
         mCategoryAdapter.setCategoryList(categoryList);
     }
 
@@ -120,12 +123,16 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.Select
         objectList.add(ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_lock_power_off));
         objectList.add(ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_lock_idle_alarm));
 
-
         mObjectAdapter.setObjectList(objectList);
     }
 
     @Override
     public void onCategorySelected() {
 
+    }
+
+    public void setListScrollEnable(boolean isEnable) {
+        mObjectLayoutManager.setScrollEnabled(isEnable);
+        mCategoryLayoutManager.setScrollEnabled(isEnable);
     }
 }
