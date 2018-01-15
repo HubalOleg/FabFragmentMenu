@@ -1,9 +1,11 @@
 package com.personal.hubal.fabfragmentmenu.adapter;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.personal.hubal.fabfragmentmenu.R;
@@ -17,7 +19,7 @@ import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
-    private List<String> mCategoryList = new ArrayList<>();
+    private List<Drawable> mCategoryList = new ArrayList<>();
 
     public SelectCategoryListener mCategoryListener;
 
@@ -42,39 +44,35 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return mCategoryList.size();
     }
 
-    public void setCategoryList(List<String> categoryList) {
+    public void setCategoryList(List<Drawable> categoryList) {
         mCategoryList = categoryList;
         notifyDataSetChanged();
     }
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mNameTextView;
-
-        private String mCategory;
+        private ImageView mCategoryImageView;
 
         private View.OnClickListener mCategoryClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCategoryListener.onCategorySelected(mCategory);
+                mCategoryListener.onCategorySelected();
             }
         };
 
         CategoryViewHolder(View itemView) {
             super(itemView);
 
-            mNameTextView = itemView.findViewById(R.id.categoryNameTextView);
+            mCategoryImageView = itemView.findViewById(R.id.categoryImageView);
             itemView.setOnClickListener(mCategoryClickListener);
         }
 
-        void onBind(int position, String category) {
-            mCategory = category;
-
-            mNameTextView.setText(category);
+        void onBind(int position, Drawable category) {
+            mCategoryImageView.setImageDrawable(category);
         }
     }
 
     public interface SelectCategoryListener {
-        void onCategorySelected(String category);
+        void onCategorySelected();
     }
 }

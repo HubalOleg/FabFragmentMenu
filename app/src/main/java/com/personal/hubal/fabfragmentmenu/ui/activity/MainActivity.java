@@ -1,27 +1,17 @@
 package com.personal.hubal.fabfragmentmenu.ui.activity;
 
 import android.app.Fragment;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.personal.hubal.fabfragmentmenu.ui.fragment.CategoryFragment;
 import com.personal.hubal.fabfragmentmenu.R;
-import com.personal.hubal.fabfragmentmenu.listener.CategoryTransitionListener;
-import com.personal.hubal.fabfragmentmenu.ui.fragment.ObjectFragment;
 
-public class MainActivity extends AppCompatActivity implements CategoryTransitionListener {
+public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton mMenuFAB;
-
-    private View.OnClickListener mMenuFABClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            openFragment(CategoryFragment.newInstance(), R.id.categoryContainer);
-        }
-    };
+    private Button mSwipeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,24 +22,28 @@ public class MainActivity extends AppCompatActivity implements CategoryTransitio
     }
 
     private void initUI() {
-        mMenuFAB = findViewById(R.id.menuFloatingActionButton);
-        mMenuFAB.setOnClickListener(mMenuFABClickListener);
-    }
-
-    @Override
-    public void openObjectFragment(String category) {
-        openFragment(ObjectFragment.newInstance(category), R.id.objectContainer);
+        mSwipeButton = findViewById(R.id.buttonSwipe);
+        mSwipeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFragmentOpen()) {
+                    getFragmentManager().popBackStack();
+                } else {
+                    openFragment(CategoryFragment.newInstance(), R.id.categoryContainer);
+                }
+            }
+        });
     }
 
     public void openFragment(Fragment fragment, int containerId) {
         getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_left,
-                        R.animator.slide_in_right,
-                        R.animator.slide_in_left,
-                        R.animator.slide_in_right)
                 .add(containerId, fragment)
                 .addToBackStack("")
                 .commit();
+    }
+
+    private boolean isFragmentOpen() {
+        return getFragmentManager().getBackStackEntryCount() > 0;
     }
 
 

@@ -28,10 +28,7 @@ public class ObjectAdapter extends RecyclerView.Adapter<ObjectAdapter.ObjectView
 
     private View mDraggingView;
 
-    public SelectObjectListener mSelectObjectListener;
-
-    public ObjectAdapter(SelectObjectListener selectObjectListener) {
-        mSelectObjectListener = selectObjectListener;
+    public ObjectAdapter() {
     }
 
     @Override
@@ -66,13 +63,6 @@ public class ObjectAdapter extends RecyclerView.Adapter<ObjectAdapter.ObjectView
         private ImageView mImage;
         private int mPosition;
 
-        private View.OnClickListener mObjectClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSelectObjectListener.onObjectSelected(mPosition);
-            }
-        };
-
         private View.OnLongClickListener mObjectLongClickListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -105,7 +95,6 @@ public class ObjectAdapter extends RecyclerView.Adapter<ObjectAdapter.ObjectView
         ObjectViewHolder(View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(mObjectClickListener);
             mImage = itemView.findViewById(R.id.objectImageView);
             mImage.setOnLongClickListener(mObjectLongClickListener);
         }
@@ -115,9 +104,5 @@ public class ObjectAdapter extends RecyclerView.Adapter<ObjectAdapter.ObjectView
 
             mImage.setImageDrawable(image);
         }
-    }
-
-    public interface SelectObjectListener {
-        void onObjectSelected(int position);
     }
 }

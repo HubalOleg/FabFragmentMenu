@@ -7,41 +7,23 @@
     android:background="@android:color/darker_gray"
     tools:context="com.personal.hubal.fabfragmentmenu.ui.activity.MainActivity">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/menuFloatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:elevation="8dp"
-        android:src="@android:drawable/ic_menu_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <FrameLayout
         android:id="@+id/categoryContainer"
-        android:layout_width="200dp"
-        android:layout_height="400dp"
-        android:layout_marginStart="8dp"
-        android:elevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
-    <FrameLayout
-        android:id="@+id/objectContainer"
-        android:layout_width="300dp"
-        android:layout_height="450dp"
-        android:layout_marginStart="8dp"
-        android:elevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Button
+        android:id="@+id/buttonSwipe"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/categoryContainer" />
 
 </android.support.constraint.ConstraintLayout>

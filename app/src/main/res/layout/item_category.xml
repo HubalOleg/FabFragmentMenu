@@ -2,15 +2,18 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_margin="6dp"
     app:cardElevation="0dp">
 
-    <TextView
-        android:id="@+id/categoryNameTextView"
+    <ImageView
+        android:id="@+id/categoryImageView"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         android:gravity="center_vertical"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
         tools:text="Test" />
