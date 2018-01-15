@@ -7,23 +7,29 @@
     android:background="@android:color/darker_gray"
     tools:context="com.personal.hubal.fabfragmentmenu.ui.activity.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/categoryContainer"
-        android:layout_width="0dp"
+    <com.personal.hubal.fabfragmentmenu.SwipeRevealLayout
+        android:id="@+id/swipeRevealLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/buttonSwipe"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categoryContainer" />
+        <FrameLayout
+            android:id="@+id/categoryContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/buttonSwipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Down" />
+
+
+    </com.personal.hubal.fabfragmentmenu.SwipeRevealLayout>
+
 
 </android.support.constraint.ConstraintLayout>

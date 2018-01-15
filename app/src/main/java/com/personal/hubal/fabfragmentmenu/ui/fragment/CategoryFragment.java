@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class CategoryFragment extends Fragment implements CategoryAdapter.SelectCategoryListener {
 
+    private ConstraintLayout mContainerLayout;
     private CategoryAdapter mCategoryAdapter;
     private ObjectAdapter mObjectAdapter;
 
@@ -66,6 +68,9 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.Select
     }
 
     private void initUI(View view) {
+        mContainerLayout = view.findViewById(R.id.categoryFragmentContainer);
+        mContainerLayout.setOnDragListener(mOnDragListener);
+
         // Category RecyclerView
         RecyclerView categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
 
@@ -82,7 +87,6 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.Select
         LinearLayoutManager objectLayoutManager = new LinearLayoutManager(getContext());
         objectLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         objectRecyclerView.setLayoutManager(objectLayoutManager);
-        objectRecyclerView.setOnDragListener(mOnDragListener);
 
         mObjectAdapter = new ObjectAdapter();
         objectRecyclerView.setAdapter(mObjectAdapter);
