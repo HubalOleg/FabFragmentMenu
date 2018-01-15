@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     public void openFragment(Fragment fragment, int containerId) {
         getFragmentManager().beginTransaction()
                 .add(containerId, fragment)
-                .addToBackStack("")
                 .commit();
     }
 
