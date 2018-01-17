@@ -13,29 +13,25 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.personal.hubal.fabfragmentmenu.listener.OnSwipeTouchListener;
 import com.personal.hubal.fabfragmentmenu.ui.fragment.CategoryFragment;
 import com.personal.hubal.fabfragmentmenu.R;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     private ConstraintLayout mConstraintLayout;
 
     private ConstraintSet mVisibleConstraint;
     private ConstraintSet mHideConstraint;
 
-    private boolean isMenuOpen = true;
+    private boolean mIsMenuOpen = true;
 
     private View.OnClickListener mOnSwipeButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Transition transition = new AutoTransition();
-            transition.setDuration(300);
-            transition.setInterpolator(new AccelerateDecelerateInterpolator());
-
-            TransitionManager.beginDelayedTransition(mConstraintLayout, transition);
-            ConstraintSet constraintSet = isMenuOpen ? mHideConstraint : mVisibleConstraint;
-            constraintSet.applyTo(mConstraintLayout);
-            isMenuOpen = !isMenuOpen;
+            animateMenu(!mIsMenuOpen);
         }
     };
 
@@ -49,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         openFragment(CategoryFragment.newInstance(), R.id.categoryContainer);
     }
 
+
     private void initUI() {
         mConstraintLayout = findViewById(R.id.constraintLayout);
 
@@ -57,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
 
         Button swipeButton = findViewById(R.id.buttonSwipe);
         swipeButton.setOnClickListener(mOnSwipeButtonClickListener);
+        swipeButton.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+            @Override
+            public boolean onSwipeTop() {
+                animateMenu(false);
+                return true;
+            }
+
+            @Override
+            public boolean onSwipeBottom() {
+                animateMenu(true);
+                return true;
+            }
+        });
 
     }
 
@@ -75,4 +85,19 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+
+    private void animateMenu(boolean isOpenMenu) {
+        if (isOpenMenu == mIsMenuOpen)
+            return;
+
+        Transition transition = new AutoTransition();
+        transition.setDuration(300);
+        transition.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        TransitionManager.beginDelayedTransition(mConstraintLayout, transition);
+        ConstraintSet constraintSet = isOpenMenu ? mVisibleConstraint : mHideConstraint;
+        constraintSet.applyTo(mConstraintLayout);
+
+        mIsMenuOpen = isOpenMenu;
+    }
 }

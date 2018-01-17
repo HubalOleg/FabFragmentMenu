@@ -1,4 +1,4 @@
-package com.personal.hubal.fabfragmentmenu.listener;
+package com.personal.hubal.fabfragmentmenu.interfaces;
 
 /**
  * Created by hubal on 1/11/2018.
