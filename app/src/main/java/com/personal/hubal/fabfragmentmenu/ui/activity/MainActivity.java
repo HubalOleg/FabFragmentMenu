@@ -1,58 +1,41 @@
 package com.personal.hubal.fabfragmentmenu.ui.activity;
 
 import android.app.Fragment;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.AutoTransition;
+import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.personal.hubal.fabfragmentmenu.SwipeRevealLayout;
 import com.personal.hubal.fabfragmentmenu.ui.fragment.CategoryFragment;
 import com.personal.hubal.fabfragmentmenu.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private CategoryFragment mCategoryFragment;
+    private ConstraintLayout mConstraintLayout;
 
-    private FrameLayout mCategoryContainer;
-    private SwipeRevealLayout mSwipeRevealLayout;
+    private ConstraintSet mVisibleConstraint;
+    private ConstraintSet mHideConstraint;
 
-    private Button mSwipeButton;
-
-    private boolean isMenuOpen = false;
-
-    private SwipeRevealLayout.SwipeListener mSwipeListener = new SwipeRevealLayout.SwipeListener() {
-        @Override
-        public void onClosed(SwipeRevealLayout view) {
-            mCategoryFragment.setListScrollEnable(true);
-
-            isMenuOpen = false;
-            mSwipeButton.setText("Down");
-        }
-
-        @Override
-        public void onOpened(SwipeRevealLayout view) {
-            mCategoryFragment.setListScrollEnable(true);
-
-            isMenuOpen = true;
-            mSwipeButton.setText("Up");
-        }
-
-        @Override
-        public void onSlide(SwipeRevealLayout view, float slideOffset) {
-            mCategoryFragment.setListScrollEnable(false);
-        }
-    };
+    private boolean isMenuOpen = true;
 
     private View.OnClickListener mOnSwipeButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (isMenuOpen) {
-                mSwipeRevealLayout.close(true);
-            } else {
-                mSwipeRevealLayout.open(true);
-            }
+            Transition transition = new AutoTransition();
+            transition.setDuration(300);
+            transition.setInterpolator(new AccelerateDecelerateInterpolator());
+
+            TransitionManager.beginDelayedTransition(mConstraintLayout, transition);
+            ConstraintSet constraintSet = isMenuOpen ? mHideConstraint : mVisibleConstraint;
+            constraintSet.applyTo(mConstraintLayout);
+            isMenuOpen = !isMenuOpen;
         }
     };
 
@@ -62,20 +45,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initUI();
-        mCategoryFragment = CategoryFragment.newInstance();
-        openFragment(mCategoryFragment, R.id.categoryContainer);
+        initConstraints();
+        openFragment(CategoryFragment.newInstance(), R.id.categoryContainer);
     }
 
     private void initUI() {
-        mCategoryContainer = findViewById(R.id.categoryContainer);
-        mCategoryContainer.setClickable(true);
+        mConstraintLayout = findViewById(R.id.constraintLayout);
 
-        mSwipeRevealLayout = findViewById(R.id.swipeRevealLayout);
+        FrameLayout categoryContainer = findViewById(R.id.categoryContainer);
+        categoryContainer.setClickable(true);
 
-        mSwipeRevealLayout.setSwipeListener(mSwipeListener);
+        Button swipeButton = findViewById(R.id.buttonSwipe);
+        swipeButton.setOnClickListener(mOnSwipeButtonClickListener);
 
-        mSwipeButton = findViewById(R.id.buttonSwipe);
-        mSwipeButton.setOnClickListener(mOnSwipeButtonClickListener);
+    }
+
+    private void initConstraints() {
+        mVisibleConstraint = new ConstraintSet();
+        mVisibleConstraint.clone(mConstraintLayout);
+
+        mHideConstraint = new ConstraintSet();
+        mHideConstraint.clone(mConstraintLayout);
+        mHideConstraint.addToVerticalChain(R.id.categoryContainer, -1, R.id.constraintLayout);
     }
 
     public void openFragment(Fragment fragment, int containerId) {
